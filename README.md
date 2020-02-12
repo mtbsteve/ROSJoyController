@@ -19,8 +19,8 @@ This opens a websocket connection between the Android device and the ROS Master 
 - Connect your joystick to the USB port of your Android device and turn the Joystick on.
 - Go to Select Controller, select the Logitech 710 icon. If the ROS_IP to the master server is set correctly, you will see a "Connected to ROS" message and moving the joystick controls should be reflected in the on screen graphics.
 - In case of a connect error, open ROS Settings menu and set your ROS_IP pointing to the IP of the computer running the ROS master and press SET. Go back to the Select Controller menu.
-- You can verify the results by entering rostopic list. There you should see the topics /joy and /cmd_vel published.
-- Enter rostopic echo /cmd_vel and move the sticks. You should see the changes reflected in the values for the linear and angular offsets:
+- You can verify the results by entering `rostopic list` on the ROS host. There you should see the topics `/joy` and `/cmd_vel` published.
+- Enter `rostopic echo /cmd_vel` and move the sticks. You should see the changes reflected in the values for the linear and angular offsets:
 ```
 linear: 
   x: 0.0
