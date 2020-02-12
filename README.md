@@ -33,9 +33,9 @@ angular:
 ---
 ```
 ## Videos
-This video below demonstrates and explains how it works:
+This video below demonstrates and explains how it works: (yet to be added)
 
-## Whats new and known restrictions/issues
+## Whats new and currently known restrictions/issues
 This project is under development. New stuff includes:
 - Support of the cmd_vel topic added
 
@@ -43,6 +43,7 @@ This project is under development. New stuff includes:
 - Implementation of the /joy node still outstanding (including button support)
 - ROS_IP needs to be pre-set to apsync companion computers
 - ROS Melodic to be tested on a TX2
+- Selection menu for the ROS topics to be implemented (currently hardcoded)
 
      
 ## Thank you
