@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">ROS Joystick Controller Version 0.1dev</string>
+    <string name="action_settings">UI Settings</string>
+
+    <!--navigation drawer-->
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="github">Example Code</string>
+    <string name="Controller">Select Controller</string>
+    <string name="ros_settings">ROS Settings</string>
+    <string name="more_info">Instructions/About</string>
+    <string name="recongizeAuthor">By: Stephan Schindewolf</string>
+    <string name="gamePad">Logitech 710</string>
+    <string name="phonePad">Phone</string>
+    <string name="terminal">Terminal</string>
+    <string name="default_ros_master_uri">192.168.178.50</string>
+    <string name="enter_ros_master_uri">Enter IP Address of ROS Master</string>
+    <string name="github_link">https://github.com/mtbsteve</string>
+
+
+    <string name="AboutMessage">
+        <b>About:</b>\
+        ROS Controller is an open-source Controller App that allows you to use an Logitech/Xbox/Ps4/Joycon or any controller that works with your phone to send output to the ROS node /...../.... This app has been tested with a Logitech 710 controller, connected via an USB Wifi dongle.\n\n
+        <b>Instructions:</b>\
+        1. Connect your joystick to the USB port of your Android device and turn the Joystick on.\
+        2. Go to Select Controller, select the Logitech 710 icon. Moving the joystick controls should be reflected in the on screen graphics.\
+        3. Open ROS Settings and set your ROS_MASTER_URI pointing to the IP of the computer running the ROS master and press connect.\
+        4. On the ROS Master computer, open a terminal window, start roscore, then run rostopic echo /...../....\
+        5. The stick movements should be shown in the terminal window.\n\
+
+        Click on the Cat icon below if you want to find latest updates or submit an issue.\n\
+        <b>Credits:</b>\
+        This project is based on the great work from Nathan Ramanathan (https://github.com/nathanRamaNoodles/Tinker-Controller) and the ROS.org team (http://wiki.ros.org/android)
+    </string>
+
+    <string name="ros_button_text">Set IP Address</string>
+
+
+</resources>
