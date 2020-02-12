@@ -1,7 +1,7 @@
 
 # ROS-Joystick-Controller
 ## About:
-ROS Controller is an open-source Controller App that allows you to use a Logitech/Xbox/Ps4 or any controller that works with your phone to send output to the ROS node `/cmd_vel` and/or to `/joy` via the rosbridge protocol. This app has been tested with a Logitech 710 controller, connected via an USB Wifi dongle.
+ROS Controller is an open-source Controller App that allows you to use a Logitech/Xbox/Ps4 or any controller that works with your phone to send output to the ROS node `/cmd_vel` and/or to `/joy_node` via the rosbridge protocol. This app has been tested with a Logitech 710 controller, connected via an USB Wifi dongle.
 
 This project supports Android SDK version 21 (Android 5.0) to 29 (including Android 10) and on the server side ROS Kinetic and ROS Melodic.
 
@@ -19,7 +19,7 @@ This opens a websocket connection between the Android device and the ROS Master 
 - Connect your joystick to the USB port of your Android device and turn the Joystick on.
 - Go to Select Controller, select the Logitech 710 icon. If the ROS_IP to the master server is set correctly, you will see a "Connected to ROS" message and moving the joystick controls should be reflected in the on screen graphics.
 - In case of a connect error, open ROS Settings menu and set your ROS_IP pointing to the IP of the computer running the ROS master and press SET. Go back to the Select Controller menu.
-- You can verify the results by entering `rostopic list` on the ROS host. There you should see the topics `/joy` and `/cmd_vel` published.
+- You can verify the results by entering `rostopic list` on the ROS host. There you should see the topics `/joy_node` and `/cmd_vel` published.
 - Enter `rostopic echo /cmd_vel` and move the sticks. You should see the changes reflected in the values for the linear and angular offsets:
 ```
 linear: 
@@ -32,6 +32,18 @@ angular:
   z: 0.0
 ---
 ```
+For the /joy_node topic, the result should look like this:
+```
+header: 
+  seq: 3313
+  stamp: 
+    secs: 1581524782
+    nsecs: 598223472
+  frame_id: ''
+axes: [-0.0, -0.0, -0.0, -0.0, -0.0, -0.0]
+buttons: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+```
+
 ## Videos
 This video below demonstrates and explains how it works: (yet to be added)
 
@@ -40,7 +52,7 @@ This project is under development. New stuff includes:
 - Support of the cmd_vel topic added
 
 <b>Known restrictions/issues:</b>
-- Implementation of the /joy node still outstanding (including button support)
+- Implementation of the /joy_node still outstanding (including button support)
 - ROS_IP needs to be pre-set to apsync companion computers
 - ROS Melodic to be tested on a TX2
 - Selection menu for the ROS topics to be implemented (currently hardcoded)
