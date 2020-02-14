@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 public class ROS_Settings_Fragment extends CyaneaFragment {
     private Toolbar toolbar;
     public static String ROS_IP = "";
+    public static String ROS_PORT = "";
     private Toast mToast;
 
     @Override
@@ -35,6 +36,8 @@ public class ROS_Settings_Fragment extends CyaneaFragment {
     }
     Button   mButton;
     EditText mEdit;
+    EditText mEdit2;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,14 +48,24 @@ public class ROS_Settings_Fragment extends CyaneaFragment {
 
         mButton = v.findViewById(R.id.button1);
         mEdit   = v.findViewById(R.id.rosuri);
+
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses button
-                Log.v("EditText", mEdit.getText().toString());
-                ROS_IP = mEdit.getText().toString();
-                sayToast("IP Address saved");
+                 // Code here executes on main thread after user presses button
+                 ROS_IP = mEdit.getText().toString();
+                 sayToast("IP Address saved");
+                 }
+        });
 
-            }
+        mButton = v.findViewById(R.id.button);
+        mEdit2   = v.findViewById(R.id.editText2);
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                // Code here executes on main thread after user presses button
+                ROS_PORT = mEdit2.getText().toString();
+                sayToast("Port Address saved");
+                }
         });
 
 

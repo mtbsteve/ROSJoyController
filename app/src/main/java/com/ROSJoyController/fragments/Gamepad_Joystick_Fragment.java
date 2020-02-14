@@ -28,6 +28,7 @@ import com.xbw.ros.rosbridge.ROSBridgeClient;
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.ImageViewCompat;
 
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import butterknife.BindView;
@@ -242,11 +243,6 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         client.send(toSend);
     }
 
-    private void sendtoROSServer(String cmd, float linx, float liny, float linz, float angx, float angy, float angz) {
-        String toSend = "{\"op\":\"publish\",\"topic\":\""+ cmd +"\",\"msg\":{\"linear\":{\"x\":" + linx + ",\"y\":" + liny + ",\"z\":" + linz + "},\"angular\":{\"x\":" + angx + ",\"y\":" + angy + ",\"z\":" + angz + "}}}";
-        client.send(toSend);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (DEBUG) Log.i(TAG, "onSaveInstanceState(Bundle)");
@@ -320,45 +316,45 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         boolean handled = true;
         switch (buttonPress) {
             case KeyEvent.KEYCODE_BACK:
-//                sayToast("Back Button");
+                sayToast("Back Button");
                 changeImageViewColor(mBackButton, isPressed);
                 sendToClient((isPressed) ? "y1" : "y0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_START:
-//                sayToast("Start/Menu Button");
+                sayToast("Start/Menu Button");
                 changeImageViewColor(mMenuButton, isPressed);
                 sendToClient((isPressed) ? "u1" : "u0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_X:
-//                sayToast("X Button");
+                sayToast("X Button");
                 changeImageViewColor(mButtonX, isPressed);
                 sendToClient((isPressed) ? "i1" : "i0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_Y:
-//                sayToast("Y Button");
+                sayToast("Y Button");
                 changeImageViewColor(mButtonY, isPressed);
                 sendToClient((isPressed) ? "o1" : "o0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_B:
-//                sayToast("B Button");
+                sayToast("B Button");
                 changeImageViewColor(mButtonB, isPressed);
                 sendToClient((isPressed) ? "p1" : "p0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_A:
-//                sayToast("A Button");
+                sayToast("A Button");
                 changeImageViewColor(mButtonA, isPressed);
                 sendToClient((isPressed) ? "a1" : "a0");
                 break;
 
 
             case KeyEvent.KEYCODE_BUTTON_THUMBL:
-//                sayToast("Left Joystick Button");
+                sayToast("Left Joystick Button");
                 changeImageViewColor(mJoystickLeft, isPressed);
                 changeImageViewColor(mJoystickLeft_inner, isPressed);
                 sendToClient((isPressed) ? "t1" : "t0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_THUMBR:
-//                sayToast("Right Joystick Button");
+                sayToast("Right Joystick Button");
                 changeImageViewColor(mJoystickRight, isPressed);
                 changeImageViewColor(mJoystickRight_inner, isPressed);
                 sendToClient((isPressed) ? "j1" : "j0");
@@ -366,30 +362,30 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
 
 
             case KeyEvent.KEYCODE_BUTTON_L1:
-//                sayToast("Left Trigger");
+                sayToast("Left Trigger");
                 changeImageViewColor(mTriggerLeft, isPressed);
                 sendToClient((isPressed) ? "w1" : "w0");
 
                 break;
             case KeyEvent.KEYCODE_BUTTON_R1:
-//                sayToast("Right Trigger");
+                sayToast("Right Trigger");
                 changeImageViewColor(mTriggerRight, isPressed);
                 sendToClient((isPressed) ? "e1" : "e0");
                 break;
             case KeyEvent.KEYCODE_BUTTON_L2:
-//                sayToast("2nd Left Trigger");
+                sayToast("2nd Left Trigger");
                 changeImageViewColor(mAnalogTriggerLeft, isPressed);
                 sendToClient((isPressed) ? "q255" : "q0");
 
                 break;
             case KeyEvent.KEYCODE_BUTTON_R2:
-//                sayToast("2nd Right Trigger");
+                sayToast("2nd Right Trigger");
                 changeImageViewColor(mAnalogTriggerRight, isPressed);
                 sendToClient((isPressed) ? "r255" : "r0");
                 break;
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
-//                sayToast("D-pad Center");
+                sayToast("D-pad Center");
                 clearPreviousDpad();
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_CENTER;
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_CENTER;
@@ -400,14 +396,14 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 changeImageViewColor(mDpadLeft, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_LEFT;
                 sendToClient("d1");
-//                sayToast("D-pad Left");
+                sayToast("D-pad Left");
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 clearPreviousDpad();
                 changeImageViewColor(mDpadUp, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_UP;
                 sendToClient("d2");
-//                sayToast("D-pad Up");
+                sayToast("D-pad Up");
                 break;
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -415,7 +411,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 changeImageViewColor(mDpadRight, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_RIGHT;
                 sendToClient("d3");
-//                sayToast("D-pad Right");
+                sayToast("D-pad Right");
                 break;
 
             case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -423,12 +419,26 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 changeImageViewColor(mDpadDown, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_DOWN;
                 sendToClient("d4");
-//                sayToast("D-pad Down");
+                sayToast("D-pad Down");
                 break;
             default:
                 handled = false;
         }
         return handled;
+    }
+
+    private void sendtoROSServer(String cmd, float linx, float liny, float linz, float angx, float angy, float angz) {
+        if (cmd == "/cmd_vel") {
+            String toSend = "{\"op\":\"publish\",\"topic\":\""+ cmd +"\",\"msg\":{\"linear\":{\"x\":" + linx + ",\"y\":" + liny + ",\"z\":" + linz + "},\"angular\":{\"x\":" + angx + ",\"y\":" + angy + ",\"z\":" + angz + "}}}";
+            client.send(toSend);
+        }
+    }
+
+    private void sendtoROSServer_joy(String cmd, float linx, float liny, float linz, float angx, float angy, float angz) {
+        String toSend = "{\"op\":\"publish\",\"topic\":\""+ cmd +"\",\"msg\":{\"linear\":{\"x\":" + linx + ",\"y\":" + liny + ",\"z\":" + linz + "},\"angular\":{\"x\":" + angx + ",\"y\":" + angy + ",\"z\":" + angz + "}}}";
+        client.send(toSend);
+        Long tsLong = System.currentTimeMillis();
+        Timestamp tsnano = new Timestamp(tsLong);
     }
 
     private void sendToClient(String message) {
