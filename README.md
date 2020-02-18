@@ -9,7 +9,7 @@ This project supports Android SDK version 21 (Android 5.0) to 29 (including Andr
 
 ## Getting Started
 Download Android Studio 3.2.0 or higher and then use it to build the project files into an .apk file
-If you are on your Android device, you can directly download the ROSJoyController.apk file.
+If you are on your Android device, you can directly download the ROSJoyController.apk file from here: https://github.com/mtbsteve/ROSJoyController/raw/master/app/release/app-release.apk
 On the host computer, you need to have ROS Kinetic or Melodic installed. In addition, you are required to install rosbridge (see http://wiki.ros.org/rosbridge_suite)
 
 ## Instructions:
