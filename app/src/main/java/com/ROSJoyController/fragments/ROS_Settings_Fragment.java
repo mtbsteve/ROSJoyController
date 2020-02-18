@@ -1,7 +1,6 @@
 package com.ROSJoyController.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,18 +66,6 @@ public class ROS_Settings_Fragment extends CyaneaFragment {
                 sayToast("Port Address saved");
                 }
         });
-
-
-
-        //githubCat.setOnClickListener(v1 -> {
-        //    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_link)));
-        //    startActivity(browserIntent);
-        //});
-
-        //donateBtn.setOnClickListener(v1 -> {
-        //    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donateLink)));
-        //    startActivity(browserIntent);
-        //});
 
         return v;
     }

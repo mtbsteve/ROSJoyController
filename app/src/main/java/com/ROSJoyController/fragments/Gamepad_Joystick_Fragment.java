@@ -28,8 +28,8 @@ import com.xbw.ros.rosbridge.ROSBridgeClient;
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.ImageViewCompat;
 
-import java.sql.Timestamp;
-import java.util.Vector;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,13 +42,19 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
     //Tag for Logging
     private final String TAG = "myTag";
 
-    private final static int PORT = 9090;
-
     private Toast mToast;
     private ClientStatus mClientStatus;
 
     private Unbinder unbinder;
     private ROSBridgeClient client;
+    private float[] joy_axes = {(float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0, (float) 0.0};
+    private int[] joy_buttons = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private int sequence_ID = 0;
+    private long time_stamp_sec;
+    private int timestamp_nsec=0;
+    private long time_stamp_prev;
+
+
     public void setRosClient(ROSBridgeClient client) {
         this.client = client;
     }
@@ -181,7 +187,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         //Setup up our interface listeners
         ((GamepadActivity) getActivity()).setJoystickListener(this);
 
-        // try to connect to the ROS server
+        // try to connect to the ROS server and check for the ROS_IP to the server
         if (ROS_Settings_Fragment.ROS_IP == "") {
             //we use the default ROS_IP address in the template in case it has not been set by the user interactively
             View x = inflater.inflate(R.layout.fragment_ros_settings, container, false);
@@ -191,8 +197,19 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
             // otherwise we use the IP address entered by the user in ROS Settings
             message = ROS_Settings_Fragment.ROS_IP;
         }
+
+        if (ROS_Settings_Fragment.ROS_PORT == "") {
+            //we use the default port address in the template in case it has not been set by the user interactively
+            View x = inflater.inflate(R.layout.fragment_ros_settings, container, false);
+            mEdit = x.findViewById(R.id.editText2);
+            message = message + ":" + mEdit.getText().toString();
+        } else {
+            // otherwise we use the port address entered by the user in ROS Settings
+            message = message + ":" + ROS_Settings_Fragment.ROS_PORT;
+        }
+
         // we try to establish the connection to the ROSBridge server
-        message = "ws://" + message + ":" + PORT;
+        message = "ws://" + message;
         ROSBridgeClient client = new ROSBridgeClient(message);
         client.connect(new ROSClient.ConnectionStatusListener() {
             @Override
@@ -233,6 +250,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         connected_to_ros =true;
         connected_to_ros_message = "Connected to ROS Server: " + message;
     }
+
     private void onLoginFailed(String message) {
         connected_to_ros =false;
         connected_to_ros_message = message;
@@ -296,17 +314,18 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         animateAnalogTriggers(mAnalogTriggerRight, joystickData[5]);
 
         // we go for values between -1 and 1 for all 4 joystick axes supported by the Logitech 710. Axes q, r are not supported but left in.
-        float k = Utility.mapFloat(joystickData[0], -1, 1, -1, 1);
-        float l = Utility.mapFloat(joystickData[1], -1, 1, -1, 1);
-        float z = Utility.mapFloat(joystickData[2], -1, 1, -1, 1);
-        float x = Utility.mapFloat(joystickData[3], -1, 1, -1, 1);
+        joy_axes[0] = Utility.mapFloat(joystickData[0], -1, 1, -1, 1);
+        joy_axes[1] = Utility.mapFloat(joystickData[1], -1, 1, -1, 1);
+        joy_axes[2] = Utility.mapFloat(joystickData[2], -1, 1, -1, 1);
+        joy_axes[3] = Utility.mapFloat(joystickData[3], -1, 1, -1, 1);
 
-        float q = Utility.mapFloat(joystickData[4], -1, 1, 100, 355);
-        float r = Utility.mapFloat(joystickData[5], -1, 1, 100, 355);
-
-        //send joystick movements to ROSBridge by using the cmd_vel topic.
+        //send joystick movements to ROSBridge
         if(connected_to_ros) {
-            sendtoROSServer("/cmd_vel", k, l, x, q, r, z);
+            try {
+                sendtoROSServer();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -318,32 +337,32 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
             case KeyEvent.KEYCODE_BACK:
                 sayToast("Back Button");
                 changeImageViewColor(mBackButton, isPressed);
-                sendToClient((isPressed) ? "y1" : "y0");
+                joy_buttons[8]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_START:
                 sayToast("Start/Menu Button");
                 changeImageViewColor(mMenuButton, isPressed);
-                sendToClient((isPressed) ? "u1" : "u0");
+                joy_buttons[9]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_X:
                 sayToast("X Button");
                 changeImageViewColor(mButtonX, isPressed);
-                sendToClient((isPressed) ? "i1" : "i0");
+                joy_buttons[0]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_Y:
                 sayToast("Y Button");
                 changeImageViewColor(mButtonY, isPressed);
-                sendToClient((isPressed) ? "o1" : "o0");
+                joy_buttons[3]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_B:
                 sayToast("B Button");
                 changeImageViewColor(mButtonB, isPressed);
-                sendToClient((isPressed) ? "p1" : "p0");
+                joy_buttons[2]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_A:
                 sayToast("A Button");
                 changeImageViewColor(mButtonA, isPressed);
-                sendToClient((isPressed) ? "a1" : "a0");
+                joy_buttons[1]=(isPressed ? 1 : 0);
                 break;
 
 
@@ -351,37 +370,37 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 sayToast("Left Joystick Button");
                 changeImageViewColor(mJoystickLeft, isPressed);
                 changeImageViewColor(mJoystickLeft_inner, isPressed);
-                sendToClient((isPressed) ? "t1" : "t0");
+                joy_buttons[10]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_THUMBR:
                 sayToast("Right Joystick Button");
                 changeImageViewColor(mJoystickRight, isPressed);
                 changeImageViewColor(mJoystickRight_inner, isPressed);
-                sendToClient((isPressed) ? "j1" : "j0");
+                joy_buttons[11]=(isPressed ? 1 : 0);
                 break;
 
 
             case KeyEvent.KEYCODE_BUTTON_L1:
                 sayToast("Left Trigger");
                 changeImageViewColor(mTriggerLeft, isPressed);
-                sendToClient((isPressed) ? "w1" : "w0");
+                joy_buttons[4]=(isPressed ? 1 : 0);
 
                 break;
             case KeyEvent.KEYCODE_BUTTON_R1:
                 sayToast("Right Trigger");
                 changeImageViewColor(mTriggerRight, isPressed);
-                sendToClient((isPressed) ? "e1" : "e0");
+                joy_buttons[5]=(isPressed ? 1 : 0);
                 break;
             case KeyEvent.KEYCODE_BUTTON_L2:
                 sayToast("2nd Left Trigger");
                 changeImageViewColor(mAnalogTriggerLeft, isPressed);
-                sendToClient((isPressed) ? "q255" : "q0");
+                joy_buttons[6]=(isPressed ? 1 : 0);
 
                 break;
             case KeyEvent.KEYCODE_BUTTON_R2:
                 sayToast("2nd Right Trigger");
                 changeImageViewColor(mAnalogTriggerRight, isPressed);
-                sendToClient((isPressed) ? "r255" : "r0");
+                joy_buttons[7]=(isPressed ? 1 : 0);
                 break;
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -389,20 +408,21 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 clearPreviousDpad();
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_CENTER;
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_CENTER;
-                sendToClient("d0");
+                joy_axes[4]=0;
+                joy_axes[5]=0;
                 break;
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 clearPreviousDpad();
                 changeImageViewColor(mDpadLeft, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_LEFT;
-                sendToClient("d1");
+                joy_axes[4]=-1;
                 sayToast("D-pad Left");
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 clearPreviousDpad();
                 changeImageViewColor(mDpadUp, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_UP;
-                sendToClient("d2");
+                joy_axes[5]=1;
                 sayToast("D-pad Up");
                 break;
 
@@ -410,7 +430,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 clearPreviousDpad();
                 changeImageViewColor(mDpadRight, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_RIGHT;
-                sendToClient("d3");
+                joy_axes[4]=1;
                 sayToast("D-pad Right");
                 break;
 
@@ -418,33 +438,47 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
                 clearPreviousDpad();
                 changeImageViewColor(mDpadDown, isPressed);
                 dPadCurrentLocation = KeyEvent.KEYCODE_DPAD_DOWN;
-                sendToClient("d4");
+                joy_axes[5]=-1;
                 sayToast("D-pad Down");
                 break;
             default:
                 handled = false;
         }
+        if(connected_to_ros && handled) {
+            try {
+                sendtoROSServer();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
         return handled;
     }
 
-    private void sendtoROSServer(String cmd, float linx, float liny, float linz, float angx, float angy, float angz) {
-        if (cmd == "/cmd_vel") {
-            String toSend = "{\"op\":\"publish\",\"topic\":\""+ cmd +"\",\"msg\":{\"linear\":{\"x\":" + linx + ",\"y\":" + liny + ",\"z\":" + linz + "},\"angular\":{\"x\":" + angx + ",\"y\":" + angy + ",\"z\":" + angz + "}}}";
-            client.send(toSend);
+
+    private void sendtoROSServer() throws JSONException {
+        sequence_ID=sequence_ID+1;
+        long time_stamp = System.currentTimeMillis();
+
+        timestamp_nsec = (int) (time_stamp - time_stamp_prev);
+        time_stamp_prev = time_stamp;
+        time_stamp_sec = time_stamp/1000;
+        //build the json array for the axes and buttons
+        JSONArray json_joy_axes= new JSONArray();
+        for (int i = 0; i < joy_axes.length; i++) {
+            json_joy_axes.put(joy_axes[i]);
         }
-    }
+        JSONArray json_joy_buttons= new JSONArray();
+        for (int i = 0; i < joy_buttons.length; i++) {
+            json_joy_buttons.put(joy_buttons[i]);
+        }
 
-    private void sendtoROSServer_joy(String cmd, float linx, float liny, float linz, float angx, float angy, float angz) {
-        String toSend = "{\"op\":\"publish\",\"topic\":\""+ cmd +"\",\"msg\":{\"linear\":{\"x\":" + linx + ",\"y\":" + liny + ",\"z\":" + linz + "},\"angular\":{\"x\":" + angx + ",\"y\":" + angy + ",\"z\":" + angz + "}}}";
-        client.send(toSend);
-        Long tsLong = System.currentTimeMillis();
-        Timestamp tsnano = new Timestamp(tsLong);
-    }
-
-    private void sendToClient(String message) {
-        /*if (mAsyncFragment != null) {
-            mAsyncFragment.sendMessage(message, 0);  //buttons are sent on channel 0 because android receives them in order.
-        }*/
+        //send the movements to /joy_node
+        String joynode = "{\"op\":\"publish\",\"topic\":\"/joy\",\"msg\":{\"header\":{\"seq\":" + sequence_ID + ",\"stamp\":{\"secs\":" + time_stamp_sec + ",\"nsecs\":" + timestamp_nsec + "},\"frame_id\":\"\"},\"axes\":" + json_joy_axes +",\"buttons\":" + json_joy_buttons + "}}";
+        client.send(joynode);
+        //send the movements to /cmd_vel_node
+        String cmdvel = "{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":" + joy_axes[0] + ",\"y\":" + joy_axes[1] + ",\"z\":" + joy_axes[3] + "},\"angular\":{\"x\":" + joy_axes[4] + ",\"y\":" + joy_axes[5] + ",\"z\":" + joy_axes[2] + "}}}";
+        client.send(cmdvel);
     }
 
     private void clearPreviousDpad() {

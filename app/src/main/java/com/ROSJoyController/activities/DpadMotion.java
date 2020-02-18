@@ -16,7 +16,7 @@ final static int CENTER = KeyEvent.KEYCODE_DPAD_CENTER;
     public int getDirectionPressed(InputEvent event) {
 
         // If the input event is a MotionEvent, check its hat axis values.
-        if (event instanceof MotionEvent) {
+       if (event instanceof MotionEvent) {
 
             // Use the hat axis value to find the D-pad direction
             MotionEvent motionEvent = (MotionEvent) event;

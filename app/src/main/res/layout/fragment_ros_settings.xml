@@ -14,6 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="?actionBarTheme"
+        app:layout_constraintTop_toTopOf="parent"
         app:title="@string/ros_settings" />
 
     <TextView
@@ -28,8 +29,8 @@
 
     <EditText
         android:id="@+id/rosuri"
-        android:layout_width="90dp"
-        android:layout_height="38dp"
+        android:layout_width="108dp"
+        android:layout_height="36dp"
         android:layout_marginEnd="32dp"
         android:autofillHints=""
         android:ems="10"

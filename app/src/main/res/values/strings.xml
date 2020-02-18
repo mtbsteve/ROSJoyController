@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">ROS Joystick Controller Version 0.3dev</string>
+    <string name="app_name">ROS Joystick Controller</string>
     <string name="action_settings">UI Settings</string>
+    <string name="myversion">1.0</string>
 
     <!--navigation drawer-->
     <string name="drawer_open">open</string>
@@ -24,14 +25,13 @@
 
     <string name="AboutMessage">
         <b>About:</b>\
-        <p>ROS Controller is an open-source Controller App that allows you to use an Logitech/Xbox or any controller that works with your phone to send output to the ROS node /cmd_vel (and in future also to /joy_node). This app has been tested with a Logitech 710 controller, connected via an USB Wifi dongle.\n\n</p>
+        <p>ROS Controller is an open-source Controller App that allows you to use an Logitech/Xbox or any controller that works with your phone to send output to the ROS node /cmd_vel or /joy. This app has been tested with a Logitech 710 controller, connected via an USB Wifi dongle.\n\n</p>
         <b>Instructions:</b>\
         1. Connect your joystick to the USB port of your Android device and turn the Joystick on.\
         2. Go to Select Controller, select the Logitech 710 icon. Moving the joystick controls should be reflected in the on screen graphics.\
         3. Open ROS Settings and set your ROS_IP pointing to the IP of the computer running the ROS master and press connect.\
-        4. On the ROS Master computer, open a terminal window, start roscore, and rosbridge.
-        5. Run rostopic echo /cmd_vel\
-        5. The stick movements for linear x,y,z and angular x,y,z should be shown in the terminal window.\n\
+        4. On the ROS Master computer, open a terminal window, start roscore, and rosbridge. Run rostopic echo /cmd_vel\ or rostopic echo /joy. \
+        5. The stick movements for linear x,y,z and angular x,y,z should be shown in the terminal window. On the /joy node, also the buttons are listed.\n\
 
         Click on the Cat icon below if you want to find latest updates or submit an issue.\n\
         <b>Credits:</b>\

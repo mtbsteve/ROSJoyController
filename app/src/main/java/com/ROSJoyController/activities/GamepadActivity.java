@@ -202,7 +202,6 @@ public class GamepadActivity extends CyaneaAppCompatActivity implements ClientSt
                 if ((sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK)
                     isJoyStick = true;
             }
-
         }
         return gameControllerDeviceIds;
     }
@@ -260,9 +259,6 @@ public class GamepadActivity extends CyaneaAppCompatActivity implements ClientSt
 
             mJoystickListener.onJoystick(previousJoystick); //here, we pass our data to our listening fragments
 
-//            Log.d("myTag", "JoyStick: X " + previousJoystick[0] + " , Y " + previousJoystick[1] +
-//                    " , Z " + previousJoystick[2] + " , RZ " + previousJoystick[3] +
-//                    " , ALT " + previousJoystick[4] + " , ART " + previousJoystick[5]);
         }
     }
 

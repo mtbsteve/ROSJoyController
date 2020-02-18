@@ -43,11 +43,11 @@ public class MainActivity extends CyaneaAppCompatActivity {
     private About_Fragment mAboutFragment = new About_Fragment();
     private ROS_Settings_Fragment mROSettingsFragment = new ROS_Settings_Fragment();
 
-    private ROSBridgeClient client;
+    //private ROSBridgeClient client;
 
-    public void setRosClient(ROSBridgeClient client) {
-        this.client = client;
-    }
+    //public void setRosClient(ROSBridgeClient client) {
+    //    this.client = client;
+    //}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
