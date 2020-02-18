@@ -49,9 +49,6 @@ This project is under development. New stuff includes:
 - Support of the cmd_vel topic added
 - ROS_IP pre-set to apsync companion computers (10.0.1.128)
 
-<b>Known restrictions/issues:</b>
-- ROS Melodic to be tested
-
      
 ## Thank you
 This project is based on the work from Nathan Ramanathan (https://github.com/nathanRamaNoodles/Tinker-Controller) and the ROS.org team (http://wiki.ros.org/android)
