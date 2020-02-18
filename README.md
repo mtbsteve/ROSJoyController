@@ -8,14 +8,14 @@ This project supports Android SDK version 21 (Android 5.0) to 29 (including Andr
 [![Click to watch the video](https://github.com/mtbsteve/ROSJoyController/blob/master/Art/IMG_7374.jpg)](https://youtu.be/Eqjn8VuzvqU)
 
 ## Getting Started
-Download Android Studio 3.2.0 or higher and then use it to build the project files into an .apk file
-If you are on your Android device, you can directly download the ROSJoyController.apk file from here: https://github.com/mtbsteve/ROSJoyController/raw/master/app/release/app-release.apk
+Download Android Studio 3.5.3 or higher and then use it to build the project files into an .apk file
+If you are on your Android device, you can directly download the .apk file from here: https://github.com/mtbsteve/ROSJoyController/raw/master/app/release/app-release.apk
 On the host computer, you need to have ROS Kinetic or Melodic installed. In addition, you are required to install rosbridge (see http://wiki.ros.org/rosbridge_suite)
 
 ## Instructions:
 - On the ROS Master computer, open a terminal window, start 
   `roslaunch rosbridge_server rosbridge_websocket.launch`
-This opens a websocket connection between the Android device and the ROS Master computer via the port 9090. The port is hard-coded, in case you need to change it edit the variable in the file Gamepad_Joystick_Fragment.java and in the rosbridge launch file.
+This opens a websocket connection between the Android device and the ROS Master computer on 10.0.1.128 via the port 9090. The IP address is preset to an apsync (see https://ardupilot.org/dev/docs/apsync-intro.html) access point (10.0.1.128), and the port is preset to 9090 (rosbridge default), You can change both settings in the ROS Settings menu in the app.
 - Connect your joystick to the USB port of your Android device and turn the Joystick on.
 - Go to Select Controller, select the Logitech 710 icon. If the ROS_IP to the master server is set correctly, you will see a "Connected to ROS" message and moving the joystick controls should be reflected in the on screen graphics.
 - In case of a connect error, open ROS Settings menu and set your ROS_IP pointing to the IP of the computer running the ROS master and press SET. Go back to the Select Controller menu.
