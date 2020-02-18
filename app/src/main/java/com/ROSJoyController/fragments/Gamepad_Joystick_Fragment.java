@@ -53,6 +53,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
     private long time_stamp_sec;
     private int timestamp_nsec=0;
     private long time_stamp_prev;
+    String frame_id="";
 
 
     public void setRosClient(ROSBridgeClient client) {
@@ -474,7 +475,7 @@ public class Gamepad_Joystick_Fragment extends CyaneaFragment implements Gamepad
         }
 
         //send the movements to /joy_node
-        String joynode = "{\"op\":\"publish\",\"topic\":\"/joy\",\"msg\":{\"header\":{\"seq\":" + sequence_ID + ",\"stamp\":{\"secs\":" + time_stamp_sec + ",\"nsecs\":" + timestamp_nsec + "},\"frame_id\":\"\"},\"axes\":" + json_joy_axes +",\"buttons\":" + json_joy_buttons + "}}";
+        String joynode = "{\"op\":\"publish\",\"topic\":\"/joy\",\"msg\":{\"header\":{\"seq\":" + sequence_ID + ",\"stamp\":{\"secs\":" + time_stamp_sec + ",\"nsecs\":" + timestamp_nsec + "},\"frame_id\":\""+frame_id+"\"},\"axes\":" + json_joy_axes +",\"buttons\":" + json_joy_buttons + "}}";
         client.send(joynode);
         //send the movements to /cmd_vel_node
         String cmdvel = "{\"op\":\"publish\",\"topic\":\"/cmd_vel\",\"msg\":{\"linear\":{\"x\":" + joy_axes[0] + ",\"y\":" + joy_axes[1] + ",\"z\":" + joy_axes[3] + "},\"angular\":{\"x\":" + joy_axes[4] + ",\"y\":" + joy_axes[5] + ",\"z\":" + joy_axes[2] + "}}}";
